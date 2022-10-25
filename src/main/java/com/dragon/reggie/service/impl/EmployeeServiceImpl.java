@@ -1,2 +1,13 @@
-package com.dragon.reggie.service.impl;public class EmployeeServiceImpl {
+package com.dragon.reggie.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dragon.reggie.entity.Employee;
+import com.dragon.reggie.mapper.EmployeeMapper;
+import com.dragon.reggie.service.EmployeeService;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
+
 }

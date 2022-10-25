@@ -1,9 +1,14 @@
-package com.itheima.reggie.common;
+package com.dragon.reggie.common;
 
 import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ *  TODO 设置通用返回结果，服务器相应的数据最终都会封装成此对象
+ * @param <T>
+ */
 @Data
 public class R<T> {
 
