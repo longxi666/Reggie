@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -70,5 +71,24 @@ public class EmployeeController {
         //TODO 1.清理Session中保存的当前员工的id
         request.getSession().removeAttribute("employee");
         return  R.success("退出成功！");
+    }
+
+    /**
+     * TODO 添加员工
+     * @param employee
+     * @return
+     */
+    @PostMapping//无需书写路径
+    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+        //TODO 1.设置表单中未填写的员工信息
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));//设置初始密码,需要加密
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        Long empID = (long) request.getSession().getAttribute("employee");//获取当前用户的ID
+        employee.setCreateUser(empID);
+        employee.setUpdateUser(empID);
+        employeeService.save(employee);
+        return R.success("新增员工成功");
+
     }
 }
