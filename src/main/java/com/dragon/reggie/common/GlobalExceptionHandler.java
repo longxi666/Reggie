@@ -19,17 +19,28 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class GlobalExceptionHandler {
 
     /**
-     * TODO 1.定义异常处理方法
+     * TODO 定义--异常处理方法
      * @return
      */
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<String> exceptionHandler(SQLIntegrityConstraintViolationException ex){
         log.error(ex.getMessage());
+
         if(ex.getMessage().contains("Duplicate entry")) {
             String[] split = ex.getMessage().split(" ");
             String message = split[2] + "已存在";//截取用户名
             return R.error(message);
         }
         return R.error("失败了,但不知道错在哪!");
+    }
+
+    /**
+     * TODO 定义--异常处理方法
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        log.error(ex.getMessage());
+        return R.error( ex.getMessage());
     }
 }

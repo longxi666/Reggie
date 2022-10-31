@@ -3,8 +3,11 @@ package com.dragon.reggie.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragon.reggie.common.R;
+import com.dragon.reggie.entity.Category;
 import com.dragon.reggie.entity.Employee;
+import com.dragon.reggie.service.CategoryService;
 import com.dragon.reggie.service.EmployeeService;
+import com.dragon.reggie.service.impl.CategoryServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
+/**
+ * TODO 用户管理
+ */
 @Slf4j
 @RestController
 @RequestMapping("/employee")
@@ -80,12 +86,18 @@ public class EmployeeController {
     public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
         //TODO 1.设置表单中未填写的员工信息
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));//设置初始密码,需要加密
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        Long empID = (long) request.getSession().getAttribute("employee");//获取当前用户的ID
-        employee.setCreateUser(empID);
-        employee.setUpdateUser(empID);
+
+        //使用
+        //employee.setCreateTime(LocalDateTime.now());
+        //employee.setUpdateTime(LocalDateTime.now());
+
+        //Long empID = (long) request.getSession().getAttribute("employee");//获取当前用户的ID
+
+        //employee.setCreateUser(empID);
+        //employee.setUpdateUser(empID);
+
         employeeService.save(employee);
+
         return R.success("新增员工成功");
 
     }
@@ -124,9 +136,11 @@ public class EmployeeController {
     public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
         //Q: 修改时传入ID精度丢失 --> 导入对象映射器 JacksonObjectMapper
         log.info(employee.toString());
-        Long empId = (Long)request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
+        //Long empId = (Long)request.getSession().getAttribute("employee");
+
+        //employee.setUpdateTime(LocalDateTime.now());
+        //employee.setUpdateUser(empId);
+
         employeeService.updateById(employee);
         return R.success("员工信息修改成功");
     }
@@ -147,6 +161,4 @@ public class EmployeeController {
             return R.error("未查询到员工信息");
         }
     }
-
-
 }
