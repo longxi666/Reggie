@@ -5,5 +5,6 @@ import com.dragon.reggie.entity.Category;
 import com.dragon.reggie.entity.Employee;
 
 public interface CategoryService extends IService<Category> {
-    public void remove(Long id);
+    public void remove(Long id);    //自制方法
+
 }

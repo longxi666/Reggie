@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * TODO 分类管理
  */
@@ -77,4 +80,20 @@ public class CategoryController {
         return R.success("修改分类信息成功!");
     }
 
+    /**
+     * TODO 根据条件查询分类数据
+     * @param category
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<Category>> list(Category category){
+        //条件构造器
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        //添加 查询条件 和 排序条件
+        queryWrapper.eq(category.getType() != null,Category::getType,category.getType());
+        queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);// 优先使用种类排序， 后使更新时间排序
+
+        List<Category> list = categoryService.list(queryWrapper);
+        return R.success(list);
+    }
 }
