@@ -40,7 +40,10 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/login",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/common/**",
+                "/user/sendMsg",//移动端发送短信
+                "/user/login"//移动端登录
         };
 
         //TODO 2、判断本次请求是否需要处理
@@ -53,14 +56,27 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
-        //TODO 4、判断登录状态，如果已登录，则直接放行
+        //TODO 4.1、判断登录状态，如果已登录，则直接放行 --Employee
         if(request.getSession().getAttribute("employee") != null){
             log.info("已登录，用户ID为:{}",request.getSession().getAttribute("employee"));
+
             Long empId = (Long) request.getSession().getAttribute("employee");
             BaseContext.setCurrentId(empId);
+
             filterChain.doFilter(request,response);
             return;
         }
+        //TODO 4.2、判断登录状态，如果已登录，则直接放行 --User
+        if(request.getSession().getAttribute("user") != null){
+            log.info("已登录，用户ID为:{}",request.getSession().getAttribute("user"));
+
+            Long userId = (Long) request.getSession().getAttribute("user");
+            BaseContext.setCurrentId(userId);
+
+            filterChain.doFilter(request,response);
+            return;
+        }
+
         //TODO 5、如果未登录则返回未登录结果，通过输出流方式向客户端页面响应数据
         log.info("用户未登录");
         response.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
